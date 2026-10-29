@@ -21,7 +21,7 @@ Submitting a payment is a fast, synchronous API call returning `202 Accepted` wi
 
 ---
 
-## Core Features (Verified from Implementation)
+## Core Features
 
 - **Decoupled Asynchronous Settlement:** `POST /api/v1/payments` durably records payments as `PENDING` alongside an outbox event in a single fast local database transaction, immediately returning `202 Accepted`.
 - **Double-Entry Bookkeeping:** All balance transfers generate matching, balanced debit and credit `LedgerEntry` records atomically within the database transaction.
