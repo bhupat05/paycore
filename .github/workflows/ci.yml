@@ -31,6 +31,7 @@ jobs:
         run: |
           sudo systemctl start docker
           docker info
+          echo "api.version=1.44" >> ~/.docker-java.properties
 
       # GitHub-hosted runners ship Docker preinstalled, which is what lets
       # the Testcontainers-based integration tests run here exactly as they
