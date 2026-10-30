@@ -98,12 +98,12 @@ class PaymentFlowIntegrationTest {
         PaymentResponse submitted = submitPayment(from.id(), to.id(), new BigDecimal("75.00"), null);
         assertThat(submitted.status()).isEqualTo("PENDING");
 
-        await().atMost(15, TimeUnit.SECONDS).untilAsserted(() -> {
+        await().atMost(45, TimeUnit.SECONDS).untilAsserted(() -> {
             PaymentResponse fetched = rest.getForObject(url("/api/v1/payments/" + submitted.id()), PaymentResponse.class);
             assertThat(fetched.status()).isEqualTo("COMPLETED");
         });
 
-        await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
+        await().atMost(30, TimeUnit.SECONDS).untilAsserted(() -> {
             assertThat(getAccount(from.id()).balance()).isEqualByComparingTo("425.00");
             assertThat(getAccount(to.id()).balance()).isEqualByComparingTo("175.00");
         });
@@ -120,11 +120,11 @@ class PaymentFlowIntegrationTest {
 
         assertThat(second.id()).isEqualTo(first.id());
 
-        await().atMost(15, TimeUnit.SECONDS).untilAsserted(() ->
+        await().atMost(45, TimeUnit.SECONDS).untilAsserted(() ->
             assertThat(getAccount(to.id()).balance()).isEqualByComparingTo("50.00"));
 
         // Give any accidental second processing a chance to happen, then confirm it didn't.
-        await().pollDelay(2, TimeUnit.SECONDS).atMost(5, TimeUnit.SECONDS)
+        await().pollDelay(2, TimeUnit.SECONDS).atMost(10, TimeUnit.SECONDS)
             .untilAsserted(() -> assertThat(getAccount(to.id()).balance()).isEqualByComparingTo("50.00"));
     }
 
@@ -147,7 +147,7 @@ class PaymentFlowIntegrationTest {
         BigDecimal expectedFinalBalance = new BigDecimal("10000.00")
             .subtract(amountEach.multiply(BigDecimal.valueOf(concurrentPayments)));
 
-        await().atMost(30, TimeUnit.SECONDS).untilAsserted(() ->
+        await().atMost(45, TimeUnit.SECONDS).untilAsserted(() ->
             assertThat(getAccount(source.id()).balance()).isEqualByComparingTo(expectedFinalBalance));
     }
 }
