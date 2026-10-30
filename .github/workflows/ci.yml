@@ -27,6 +27,11 @@ jobs:
           java-version: "21"
           cache: maven
 
+      - name: Ensure Docker daemon is running
+        run: |
+          sudo systemctl start docker
+          docker info
+
       # GitHub-hosted runners ship Docker preinstalled, which is what lets
       # the Testcontainers-based integration tests run here exactly as they
       # do locally, against real Postgres and Kafka containers.
